@@ -470,8 +470,15 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
                     var rtn;
                     //Add values from the form into the table
-                    if (oSettings.aoColumns != null && isNaN(parseInt(oSettings.aoColumns[0].mDataProp))) {
-                        rtn = oTable.fnAddData(rowData);
+                    /**
+                     *  ISSUE COPIED FROM ISSUES IN ORIGINAL PROJECT
+                     *  https://code.google.com/p/jquery-datatables-editable/issues/attachmentText?id=114&aid=1140008000&name=fixAddData.diff&token=ABZ6GAdDl4DrChcFNZgyElwt_2z3PWs3OQ%3A1426877135207
+                     */
+                    // -- if (oSettings.aoColumns != null && isNaN(parseInt(oSettings.aoColumns[0].mDataProp))) {
+                    // --   rtn = oTable.fnAddData(rowData);
+                    var prop = oSettings.aoColumns[0].mDataProp !== undefined ? oSettings.aoColumns[0].mDataProp : oSettings.aoColumns[0].mData; // ++
+                    if (oSettings.aoColumns != null && isNaN(parseInt(prop))) { // ++
+                        rtn = oTable.fnAddData(data); // ++
                     }
                     else {
                         rtn = oTable.fnAddData(values);
@@ -874,17 +881,30 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     //Deprecated
                     sCellValue = sCellValue.replace("DATAROWID", iDT_RowId);
                     sCellValue = sCellValue.replace(properties.sIDToken, iDT_RowId);
+                    /**
+                     *  ISSUE COPIED FROM ISSUES IN ORIGINAL PROJECT
+                     *  https://code.google.com/p/jquery-datatables-editable/issues/attachmentText?id=114&aid=1140008000&name=fixAddData.diff&token=ABZ6GAdDl4DrChcFNZgyElwt_2z3PWs3OQ%3A1426877135207
+                     */
+
+                    var prop = oSettings.aoColumns[0].mDataProp !== undefined ? oSettings.aoColumns[0].mDataProp : oSettings.aoColumns[0].mData; // ++
+
                     if (oSettings.aoColumns != null
                                 && oSettings.aoColumns[rel] != null
-                                && isNaN(parseInt(oSettings.aoColumns[0].mDataProp))) {
+                    //          && isNaN(parseInt(oSettings.aoColumns[0].mDataProp))) {
+                                && isNaN(parseInt(prop))) { // ++
                         rowData[oSettings.aoColumns[rel].mDataProp] = sCellValue;
                     } else {
                         values[rel] = sCellValue;
                     }
                 }
             });
-
-            if (oSettings.aoColumns != null && isNaN(parseInt(oSettings.aoColumns[0].mDataProp))) {
+            /**
+             *  ISSUE COPIED FROM ISSUES IN ORIGINAL PROJECT
+             *  https://code.google.com/p/jquery-datatables-editable/issues/attachmentText?id=114&aid=1140008000&name=fixAddData.diff&token=ABZ6GAdDl4DrChcFNZgyElwt_2z3PWs3OQ%3A1426877135207
+             */
+            // -- if (oSettings.aoColumns != null && isNaN(parseInt(oSettings.aoColumns[0].mDataProp))) {
+            var prop = oSettings.aoColumns[0].mDataProp !== undefined ? oSettings.aoColumns[0].mDataProp : oSettings.aoColumns[0].mData; // ++
+            if (oSettings.aoColumns != null && isNaN(parseInt(prop))) { // ++
                 return rowData;
             }
             else {
