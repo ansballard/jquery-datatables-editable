@@ -1,9 +1,15 @@
 # jquery-datatables-editable
 A fork of the datatables plugin foound here: https://code.google.com/p/jquery-datatables-editable/
 
-This fork is meant to update the project to be used with modern versions of jQuery and Datatables. Currently testing with:
+This fork is meant to update the project to be used with modern versions of jQuery and Datatables. Dependencies are in 'bower.json'.
 
-1. [Datatables](http://www.datatables.net/) 1.10.5
-2. [jQuery](http://jquery.com/) 1.11.2
+Steps To Build: (need [node/npm](https://nodejs.org/) installed)
+```
+git clone https://github.com/ansballard/jquery-datatables-editable.git editable
+cd editable
+npm install
+bower install
+grunt
+```
 
-Will add a bower config and gruntfile
+Any formatting error should show up after running grunt, and a minified version/source map will be generated.
