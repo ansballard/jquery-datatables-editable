@@ -1,7 +1,13 @@
 {
     "globals": {
         "jQuery": true,
-        "document": true
+        "document": true,
+        "alert": true,
+        "console": true,
+        "confirm": true,
+        "setTimeout": true,
+        "KeyTable": true,
+        "rowData": true
     },
     "rules": {
     	"no-unused-vars": false,
@@ -9,11 +15,9 @@
     	"no-shadow": false,
     	"no-underscore-dangle": false,
     	"no-new-object": false,
-    	"no-use-before-define": false,
     	"no-alert": false,
     	"camelcase": false,
     	"no-array-constructor": false,
-    	"no-loop-func": false,
-    	"no-redeclare": false
+    	"no-loop-func": false
     }
 }
