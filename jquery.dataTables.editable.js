@@ -188,7 +188,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             }
         }
 
-        var sOldValue, sNewCellValue, sNewCellDislayValue;
+        var sOldValue, sNewCellValue, sNewCellDisplayValue;
 
         function fnApplyEditable(aoNodes) {
             ///<summary>
