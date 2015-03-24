@@ -314,11 +314,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     var aPos = oTable.fnGetPosition(this);
 
                     var bRefreshTable = !oSettings.oFeatures.bServerSide;
-                    $("td.last-updated-cell", oTable.fnGetNodes( )).removeClass("last-updated-cell");
+                    $("td.last-updated-cell", oTable.fnGetNodes( )).removeClass("last-updated-cell").removeClass("info").removeClass("danger");
                     if(sValue.indexOf(properties.sFailureResponsePrefix) > -1) {
                         oTable.fnUpdate(sOldValue, aPos[0], aPos[2], bRefreshTable);
-                        $("td.last-updated-cell", oTable).removeClass("last-updated-cell");
-                        $(this).addClass("last-updated-cell");
+                        $("td.last-updated-cell", oTable).removeClass("last-updated-cell").removeClass("info").removeClass("danger");
+                        $(this).addClass("last-updated-cell").addClass("danger");
                         properties.fnShowError(sValue.replace(properties.sFailureResponsePrefix, "").trim(), "update");
                         status = "failure";
                     } else {
@@ -336,8 +336,8 @@ returns true if plugin should continue with sending AJAX request, false will abo
                             }else{
                                 oTable.fnUpdate(sNewCellDisplayValue, aPos[0], aPos[2], bRefreshTable);
                             }
-                            $("td.last-updated-cell", oTable).removeClass("last-updated-cell");
-                            $(this).addClass("last-updated-cell");
+                            $("td.last-updated-cell", oTable).removeClass("last-updated-cell").removeClass("info").removeClass("danger");
+                            $(this).addClass("last-updated-cell").addClass("info");
                             status = "success";
                         } else {
                             oTable.fnUpdate(sOldValue, aPos[0], aPos[2], bRefreshTable);
@@ -535,15 +535,14 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     //Apply editable plugin on the cells of the table
                     fnApplyEditable(oTRAdded);
 
-                    $("tr.last-added-row", oTable).removeClass("last-added-row");
-                    $(oTRAdded).addClass("last-added-row");
+                    $("tr.last-added-row", oTable).removeClass("last-added-row").removeClass("success");
+                    $(oTRAdded).addClass("last-added-row").addClass("success");
                 } /*else {
                     oTable.fnDraw(false);
                 }*/
                 //Close the dialog
                 //oAddNewRowForm.dialog("close");
                 $("#addModal").modal("hide");
-                console.log("hello?");
                 $(oAddNewRowForm)[0].reset();
                 $(".error", $(oAddNewRowForm)).html("");
 
@@ -652,8 +651,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                 return;
             }
             if (properties.oDeleteRowButtonOptions != null) {
-                //oDeleteRowButton.disable();
-                oDeleteRowButton.button("option", "disabled", true);
+                oDeleteRowButton.button().addClass("disabled");
             } else {
                 oDeleteRowButton.attr("disabled", "true");
             }
@@ -665,8 +663,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             ///</summary>
 
             if (properties.oDeleteRowButtonOptions != null) {
-                //oDeleteRowButton.enable();
-                oDeleteRowButton.button("option", "disabled", false);
+                oDeleteRowButton.button().removeClass("disabled");
             } else {
                 oDeleteRowButton.removeAttr("disabled");
             }
@@ -1051,7 +1048,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             oAddNewRowCancelButtonOptions: { label: "Cancel" },
             sDeleteRowButtonId: "btnDeleteRow",
             oDeleteRowButtonOptions: null,
-            sSelectedRowClass: "row_selected",
+            sSelectedRowClass: "active",
             sReadOnlyCellClass: "read_only",
             sAddDeleteToolbarSelector: ".add_delete_toolbar",
             fnShowError: _fnShowError,
@@ -1230,9 +1227,9 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     oCancelRowAddingButton.click(fnOnCancelRowAdding);
                 }
                 // if the array contains elements, add them to the dialog
-                if (aAddNewRowFormButtons.length > 0) {
+                //if (aAddNewRowFormButtons.length > 0) {
                     //oAddNewRowForm.dialog("option", "buttons", aAddNewRowFormButtons);
-                }
+                //}
                 //Issue: It cannot find it with this call:
                 //oConfirmRowAddingButton = $("#" + properties.sAddNewRowOkButtonId, oAddNewRowForm);
                 //oCancelRowAddingButton = $("#" + properties.sAddNewRowCancelButtonId, oAddNewRowForm);
@@ -1279,8 +1276,8 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
             //If delete button exists disable it until some row is selected
             if (oDeleteRowButton != null) {
-                if (properties.oDeleteRowButtonOptions != null) {
-                    oDeleteRowButton.button().addClass("btn " + properties.oDeleteRowButtonOptions.icons.primary).on("click", function() { $("#deleteModal").modal(); });
+                if (properties.oDeleteRowButtonOptions != null && properties.oDeleteRowButtonOptions.icons) {
+                    oDeleteRowButton.button().addClass("btn " + properties.oDeleteRowButtonOptions.icons.primary);
                     //oDeleteRowButton.button(properties.oDeleteRowButtonOptions);
                 }
                 fnDisableDeleteButton();
@@ -1288,7 +1285,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
             //If add button exists convert it to the JQuery-ui button
             if (oAddNewRowButton != null) {
-                if (properties.oAddNewRowButtonOptions != null) {
+                if (properties.oAddNewRowButtonOptions != null && properties.oAddNewRowButtonOptions.icons) {
                     oAddNewRowButton.button().addClass("btn " + properties.oAddNewRowButtonOptions.icons.primary).on("click", function() { $("#addModal").modal(); });
                     //oAddNewRowButton.button(properties.oAddNewRowButtonOptions);
                 }
@@ -1297,7 +1294,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
             //If form ok button exists convert it to the JQuery-ui button
             if (oConfirmRowAddingButton != null) {
-                if (properties.oAddNewRowOkButtonOptions != null) {
+                if (properties.oAddNewRowOkButtonOptions != null && properties.oAddNewRowOkButtonOptions.icons) {
                     oConfirmRowAddingButton.button().addClass("btn " + properties.oAddNewRowOkButtonOptions.icons.primary).on("click", function() { $("#confirmModal").modal(); });
                     //oConfirmRowAddingButton.button(properties.oAddNewRowOkButtonOptions);
                 }
@@ -1305,7 +1302,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
             //If form cancel button exists convert it to the JQuery-ui button
             if (oCancelRowAddingButton != null) {
-                if (properties.oAddNewRowCancelButtonOptions != null) {
+                if (properties.oAddNewRowCancelButtonOptions != null && properties.oAddNewRowCancelButtonOptions.icons) {
                     oCancelRowAddingButton.button().addClass("btn " + properties.oAddNewRowCancelButtonOptions.icons.primary).on("click", function() { $("#cancelModal").modal(); });
                     //oCancelRowAddingButton.button(properties.oAddNewRowCancelButtonOptions);
                 }
@@ -1355,7 +1352,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         var oActionFormLink = $(".table-action-" + sAction);
                         if (oActionFormLink.length !== 0) {
 
-                            oActionFormLink.live("click", function () {
+                            oActionFormLink.on("click", function () {
 
 
                                 var sClass = this.className;

@@ -48,6 +48,7 @@
   * @param String  options[select]    true or false, when true text is highlighted ??
   * @param String  options[placeholder] Placeholder text or html to insert when element is empty. **
   * @param String  options[onblur]    'cancel', 'submit', 'ignore' or function ??
+  * @param String  options[inputcss]    CSS class to apply to input itself ??
   *             
   * @param Function options[onsubmit] function(settings, original) { ... } called before submit
   * @param Function options[onreset]  function(settings, original) { ... } called before reset
@@ -198,6 +199,15 @@
 
                 /* Add main input element to form and store it in input. */
                 var input = element.apply(form, [settings, self]);
+ 
+                /* Apply css class to input: https://github.com/tuupola/jquery_jeditable/pull/132/files */
+                if (settings.inputclass) {
+                    if ('inherit' == settings.inputclass) {
+                        input.attr('class', $(self).attr('class'));            
+                    } else {
+                        input.attr('class', settings.inputclass);
+                    }
+                }
 
                 /* Set input content via POST, GET, given data or existing value. */
                 var input_content;
@@ -540,7 +550,8 @@
         placeholder: 'Click to edit',
         loaddata   : {},
         submitdata : {},
-        ajaxoptions: {}
+        ajaxoptions: {},
+        inputclass : 'form-control'
     };
 
 })(jQuery);

@@ -11,7 +11,6 @@
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css">
 
 <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
-<!--<script src="bower_components/jquery-ui/jquery-ui.js" type="text/javascript"></script>-->
 <script src="bower_components/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js" type="text/javascript"></script>
@@ -104,6 +103,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="addModalLabel">Add Row</h4>
 			</div>
+			<!-- THIS FORM IS NECESSARY, EDITABLE DEPENDS ON THIS ID -->
 			<form id="formAddNewRow" action="#" title="Add a new browser">
 				<div class="modal-body">
 					<div class="form-group">
@@ -138,31 +138,6 @@
 					<button type="submit" class="btn btn-primary">Save changes</button>
 				</div>
 			</form>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="deleteModalLabel">Add Row</h4>
-			</div>
-			<div class="modal-body">
-				<div class="form-group">
-					<label for="recipient-name" class="control-label">Recipient:</label>
-					<input type="text" class="form-control" id="recipient-name">
-				</div>
-				<div class="form-group">
-					<label for="message-text" class="control-label">Message:</label>
-					<textarea class="form-control" id="message-text"></textarea>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary">Save changes</button>
-			</div>
 		</div>
 	</div>
 </div>
