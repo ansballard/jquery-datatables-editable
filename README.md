@@ -15,3 +15,5 @@ grunt
 ```
 
 Any formatting error should show up after running grunt, and a minified version/source map will be generated.
+
+[Example using bootstrap](http://ansballard.github.io/jquery-datatables-editable/)
