@@ -1349,7 +1349,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         var oActionFormLink = $(".table-action-" + sAction);
                         if (oActionFormLink.length !== 0) {
 
-                            oActionFormLink.live("click", function () {
+                            oActionFormLink.on("click", function () {
 
 
                                 var sClass = this.className;
