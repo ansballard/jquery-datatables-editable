@@ -15,23 +15,19 @@ module.exports = function(grunt) { "use strict";
         files: [{
           src: ["jquery.dataTables.editable.js"],
           dest: "jquery.dataTables.editable.min.js"
-        },
-        {
-          src: ["jquery.dataTables.editable.bootstrap.js"],
-          dest: "jquery.dataTables.editable.bootstrap.min.js"
         }]
       }
     },
     eslint: {
-      target: ["jquery.dataTables.editable.js", "jquery.dataTables.editable.bootstrap.js"]
+      target: ["jquery.dataTables.editable.js"]
     },
     watch: {
       js: {
-        files: ["jquery.dataTables.editable.js", "jquery.dataTables.editable.bootstrap.js"],
+        files: ["jquery.dataTables.editable.js"],
         tasks: ["uglify:dist"]
       },
       lint: {
-        files: ["jquery.dataTables.editable.js", "jquery.dataTables.editable.bootstrap.js", ".eslintrc"],
+        files: ["jquery.dataTables.editable.js", ".eslintrc"],
         tasks: ["eslint"]
       }
     }

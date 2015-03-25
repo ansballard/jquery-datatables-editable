@@ -314,9 +314,16 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     var aPos = oTable.fnGetPosition(this);
 
                     var bRefreshTable = !oSettings.oFeatures.bServerSide;
+                    if($().modal) {
+                        $("td.last-updated-cell", oTable.fnGetNodes( )).removeClass("info").removeClass("danger");
+                    }
                     $("td.last-updated-cell", oTable.fnGetNodes( )).removeClass("last-updated-cell");
                     if(sValue.indexOf(properties.sFailureResponsePrefix) > -1) {
                         oTable.fnUpdate(sOldValue, aPos[0], aPos[2], bRefreshTable);
+                        if($().modal) {
+                            $("td.last-updated-cell", oTable).removeClass("info").removeClass("danger");
+                            $(this).addClass("danger");
+                        }
                         $("td.last-updated-cell", oTable).removeClass("last-updated-cell");
                         $(this).addClass("last-updated-cell");
                         properties.fnShowError(sValue.replace(properties.sFailureResponsePrefix, "").trim(), "update");
@@ -335,6 +342,10 @@ returns true if plugin should continue with sending AJAX request, false will abo
                                 oTable.fnUpdate(sValue, aPos[0], aPos[2], bRefreshTable);
                             }else{
                                 oTable.fnUpdate(sNewCellDisplayValue, aPos[0], aPos[2], bRefreshTable);
+                            }
+                            if($().modal) {
+                                $("td.last-updated-cell", oTable).removeClass("info").removeClass("danger");
+                                $(this).addClass("info");
                             }
                             $("td.last-updated-cell", oTable).removeClass("last-updated-cell");
                             $(this).addClass("last-updated-cell");
@@ -535,13 +546,21 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     //Apply editable plugin on the cells of the table
                     fnApplyEditable(oTRAdded);
 
+                    if($().modal) {
+                        $("tr.last-added-row", oTable).removeClass("success");
+                        $(oTRAdded).addClass("success");
+                    }
                     $("tr.last-added-row", oTable).removeClass("last-added-row");
                     $(oTRAdded).addClass("last-added-row");
                 } /*else {
                     oTable.fnDraw(false);
                 }*/
                 //Close the dialog
-                oAddNewRowForm.dialog("close");
+                if(jQuery.ui) {
+                    oAddNewRowForm.dialog("close");
+                } else if($().modal) {
+                    $("#addModal").modal("hide");
+                }
                 $(oAddNewRowForm)[0].reset();
                 $(".error", $(oAddNewRowForm)).html("");
 
@@ -650,8 +669,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
                 return;
             }
             if (properties.oDeleteRowButtonOptions != null) {
-                //oDeleteRowButton.disable();
-                oDeleteRowButton.button("option", "disabled", true);
+                if(jQuery.ui) {
+                    oDeleteRowButton.button("option", "disabled", true);
+                } else {
+                    oDeleteRowButton.button().addClass("disabled");
+                }
             } else {
                 oDeleteRowButton.attr("disabled", "true");
             }
@@ -663,8 +685,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
             ///</summary>
 
             if (properties.oDeleteRowButtonOptions != null) {
-                //oDeleteRowButton.enable();
-                oDeleteRowButton.button("option", "disabled", false);
+                if(jQuery.ui) {
+                    oDeleteRowButton.button("option", "disabled", true);
+                } else {
+                    oDeleteRowButton.button().removeClass("disabled");
+                }
             } else {
                 oDeleteRowButton.removeAttr("disabled");
             }
@@ -1049,7 +1074,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
             oAddNewRowCancelButtonOptions: { label: "Cancel" },
             sDeleteRowButtonId: "btnDeleteRow",
             oDeleteRowButtonOptions: null,
-            sSelectedRowClass: "row_selected",
+            sSelectedRowClass: (jQuery.ui ? "row_selected" : "active"),
             sReadOnlyCellClass: "read_only",
             sAddDeleteToolbarSelector: ".add_delete_toolbar",
             fnShowError: _fnShowError,
@@ -1158,7 +1183,9 @@ returns true if plugin should continue with sending AJAX request, false will abo
                 } else {
                     properties.oAddNewRowFormOptions = { autoOpen: false };
                 }
-                oAddNewRowForm.dialog(properties.oAddNewRowFormOptions);
+                if(jQuery.ui) {
+                    oAddNewRowForm.dialog(properties.oAddNewRowFormOptions);
+                }
 
                 //Add button click handler on the "Add new row" button
                 oAddNewRowButton = $("#" + properties.sAddNewRowButtonId);
@@ -1167,7 +1194,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
                         if(oAddNewRowButton.data("add-event-attached") !== "true")
                         {
                             oAddNewRowButton.click(function () {
-                                oAddNewRowForm.dialog("open");
+                                if(jQuery.ui) {
+                                    oAddNewRowForm.dialog("open");
+                                } else if($().modal) {
+                                    $("#addModal").modal("show");
+                                }
                             });
                             oAddNewRowButton.data("add-event-attached", "true");
                         }
@@ -1228,7 +1259,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     oCancelRowAddingButton.click(fnOnCancelRowAdding);
                 }
                 // if the array contains elements, add them to the dialog
-                if (aAddNewRowFormButtons.length > 0) {
+                if (jQuery.ui && aAddNewRowFormButtons.length > 0) {
                     oAddNewRowForm.dialog("option", "buttons", aAddNewRowFormButtons);
                 }
                 //Issue: It cannot find it with this call:
@@ -1266,7 +1297,11 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     && oAddNewRowForm != null) {
                     oAddDeleteToolbar.append("<button id='" + properties.sAddNewRowButtonId + "' class='add_row'>Add</button>");
                     oAddNewRowButton = $("#" + properties.sAddNewRowButtonId);
-                    oAddNewRowButton.click(function () { oAddNewRowForm.dialog("open"); });
+                    oAddNewRowButton.click(function () {
+                        if(jQuery.ui) {
+                            oAddNewRowForm.dialog("open");
+                        }
+                    });
                 }
                 if (oDeleteRowButton == null && properties.sDeleteRowButtonId !== "") {
                     oAddDeleteToolbar.append("<button id='" + properties.sDeleteRowButtonId + "' class='delete_row'>Delete</button>");
@@ -1276,32 +1311,48 @@ returns true if plugin should continue with sending AJAX request, false will abo
             }
 
             //If delete button exists disable it until some row is selected
-            if (oDeleteRowButton != null) {
-                if (properties.oDeleteRowButtonOptions != null) {
+            if (oDeleteRowButton != null && properties.oDeleteRowButtonOptions != null) {
+                // If using jQuery-UI
+                if(jQuery.ui) {
                     oDeleteRowButton.button(properties.oDeleteRowButtonOptions);
+                // If using Bootstrap and there are icons/classes specified
+                } else if(properties.oDeleteRowButtonOptions.icons) {
+                    oDeleteRowButton.button().addClass("btn " + properties.oDeleteRowButtonOptions.icons.primary);
                 }
                 fnDisableDeleteButton();
             }
 
             //If add button exists convert it to the JQuery-ui button
-            if (oAddNewRowButton != null) {
-                if (properties.oAddNewRowButtonOptions != null) {
+            if (oAddNewRowButton != null && properties.oAddNewRowButtonOptions != null) {
+                // If using jQuery-UI
+                if(jQuery.ui) {
                     oAddNewRowButton.button(properties.oAddNewRowButtonOptions);
+                // If using Bootstrap and there are icons/classes specified
+                } else if(properties.oAddNewRowButtonOptions.icons) {
+                    oAddNewRowButton.button().addClass("btn " + properties.oAddNewRowButtonOptions.icons.primary).on("click", function() { $("#addModal").modal(); });
                 }
             }
 
 
             //If form ok button exists convert it to the JQuery-ui button
-            if (oConfirmRowAddingButton != null) {
-                if (properties.oAddNewRowOkButtonOptions != null) {
+            if (oConfirmRowAddingButton != null && properties.oAddNewRowOkButtonOptions != null) {
+                // If using jQuery-UI
+                if(jQuery.ui) {
                     oConfirmRowAddingButton.button(properties.oAddNewRowOkButtonOptions);
+                // If using Bootstrap and there are icons/classes specified
+                } else if (properties.oAddNewRowOkButtonOptions.icons) {
+                    oConfirmRowAddingButton.button().addClass("btn " + properties.oAddNewRowOkButtonOptions.icons.primary).on("click", function() { $("#confirmModal").modal(); });
                 }
             }
 
             //If form cancel button exists convert it to the JQuery-ui button
-            if (oCancelRowAddingButton != null) {
-                if (properties.oAddNewRowCancelButtonOptions != null) {
+            if (oCancelRowAddingButton != null && properties.oAddNewRowCancelButtonOptions != null) {
+                // If using jQuery-UI
+                if(jQuery.ui) {
                     oCancelRowAddingButton.button(properties.oAddNewRowCancelButtonOptions);
+                // If using Bootstrap and there are icons/classes specified
+                } else if(properties.oAddNewRowCancelButtonOptions.icons) {
+                    oCancelRowAddingButton.button().addClass("btn " + properties.oAddNewRowCancelButtonOptions.icons.primary).on("click", function() { $("#cancelModal").modal(); });
                 }
             }
 
