@@ -686,7 +686,7 @@ returns true if plugin should continue with sending AJAX request, false will abo
 
             if (properties.oDeleteRowButtonOptions != null) {
                 if(jQuery.ui) {
-                    oDeleteRowButton.button("option", "disabled", true);
+                    oDeleteRowButton.button("option", "disabled", false);
                 } else {
                     oDeleteRowButton.button().removeClass("disabled");
                 }
