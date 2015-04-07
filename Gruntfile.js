@@ -38,6 +38,15 @@ module.exports = function(grunt) { "use strict";
           base: ""
         }
       }
+    },
+    auto_install: {
+      dist: {
+        options: {
+          npm: false,
+          failOnError: true,
+          stdOut: true
+        }
+      }
     }
   });
 
@@ -45,13 +54,15 @@ module.exports = function(grunt) { "use strict";
   grunt.loadNpmTasks("grunt-eslint");
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-contrib-connect");
+  grunt.loadNpmTasks("grunt-auto-install");
 
   grunt.registerTask("default", ["eslint", "uglify:dist"]);
   grunt.registerTask("minify", ["uglify:dist"]);
   grunt.registerTask("lint", ["eslint"]);
+  grunt.registerTask("install", ["auto_install"]);
   grunt.registerTask("serve", ["connect"]);
 
   grunt.registerTask("dev", "Lint, minify, serve index.html, and watch for changes", function() {
-    grunt.task.run(["default", "serve", "watch"]);
+    grunt.task.run(["install", "default", "serve", "watch"]);
   });
 };
