@@ -1,5 +1,4 @@
 # jquery-datatables-editable
-A fork of the [datatables plugin found here](https://code.google.com/p/jquery-datatables-editable/)
 
 This fork is meant to update the project to be used with modern versions of jQuery and Datatables. Dependencies are in 'bower.json'.
 
