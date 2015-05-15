@@ -279,6 +279,9 @@ returns true if plugin should continue with sending AJAX request, false will abo
                     var columnPosition = oTable.fnGetPosition(this)[1];
                     var columnId = oTable.fnGetPosition(this)[2];
                     var sColumnName = oTable.fnSettings().aoColumns[columnId].sName;
+                    if((sColumnName == null || sColumnName === "") && oTable.fnSettings().aoColumns[columnId].nTh.id !== "") {
+                      sColumnName = oTable.fnSettings().aoColumns[columnId].nTh.id;
+                    }
                     if (sColumnName == null || sColumnName === "") {
                         sColumnName = oTable.fnSettings().aoColumns[columnId].sTitle;
                     }
@@ -1478,4 +1481,3 @@ returns true if plugin should continue with sending AJAX request, false will abo
         });
     };
 })(jQuery);
-
