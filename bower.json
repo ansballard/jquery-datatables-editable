@@ -10,8 +10,8 @@
   ],
   "dependencies": {
     "jquery-validation": "1.13.1",
-    "datatables": "1.10.5",
-    "jquery": "1.11.2",
+    "datatables": "1.10.7",
+    "jquery": "1.11.3",
     "jquery-ui": "1.11.4",
     "jeditable": "1.7.3",
     "bootstrap": "~3.3.4",
